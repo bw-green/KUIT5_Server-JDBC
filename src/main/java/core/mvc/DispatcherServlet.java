@@ -21,6 +21,7 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String url = req.getRequestURI();
+        System.out.println("실행");
         Controller controller = requestMapping.getController(url);
         try {
             ModelAndView modelAndView = controller.execute(req, resp);

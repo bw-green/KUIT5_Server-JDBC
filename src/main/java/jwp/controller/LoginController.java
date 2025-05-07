@@ -16,7 +16,8 @@ public class LoginController extends AbstractController {
         HttpSession session = request.getSession();
         String userId = request.getParameter("userId");
         String password = request.getParameter("password");
-
+        System.out.println(userId);
+        System.out.println(password);
         User loginUser = new User(userId, password);
         UserDao userDao = new UserDao();
         User user = userDao.findByUserId(userId);
