@@ -1,21 +1,22 @@
 package jwp.controller.qna;
 
-import core.mvc.*;
-
+import core.mvc.Controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import core.mvc.JspView;
+import core.mvc.View;
 import jwp.util.UserSessionUtils;
 
-public class CreateQuestionFormController extends AbstractController {
+public class CreateQuestionFormController implements Controller {
 
     @Override
-    public ModelAndView execute(HttpServletRequest request, HttpServletResponse resp) throws Exception {
+    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         if (UserSessionUtils.isLogined(session)) {
-            return jspView("/qna/form.jsp");
+            return new JspView("/qna/form.jsp") ;
         }
-        return jspView("redirect:/user/loginForm") ;
+        return new JspView("redirect:/user/loginForm");
     }
 }

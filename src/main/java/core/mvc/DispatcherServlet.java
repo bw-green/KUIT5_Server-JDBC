@@ -19,18 +19,22 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String url = req.getRequestURI();
-        System.out.println("실행");
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String url = request.getRequestURI();
         Controller controller = requestMapping.getController(url);
+        if (controller == null) {
+            System.out.println(url + " not found");
+            return;
+        }
         try {
-            ModelAndView modelAndView = controller.execute(req, resp);
-            View view = modelAndView.getView();
-            view.render(modelAndView.getModel(),req, resp);
+            View view = controller.execute(request,response);
+
+            view.render(request, response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new ServletException(e.getMessage());
         }
     }
+
 
 }

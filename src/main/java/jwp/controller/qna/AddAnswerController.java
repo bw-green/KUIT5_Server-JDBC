@@ -1,13 +1,16 @@
 package jwp.controller.qna;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import core.mvc.*;
+import core.mvc.Controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import core.mvc. JsonView;
+import core.mvc.JspView;
+import core.mvc.View;
 import jwp.dao.AnswerDao;
 import jwp.dao.QuestionDao;
 import jwp.model.Answer;
@@ -18,7 +21,7 @@ public class AddAnswerController implements Controller {
     QuestionDao questionDao = new QuestionDao();
 
     @Override
-    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Answer answer = new Answer(Integer.parseInt(request.getParameter("questionId")), request.getParameter("writer"),
                 request.getParameter("contents"));
 
@@ -28,19 +31,10 @@ public class AddAnswerController implements Controller {
         question.increaseCountOfAnswer();
         questionDao.updateCountOfAnswer(question);
 
-        System.out.println(request.getParameter("questionId"));
-        System.out.println(request.getParameter("writer"));
-        System.out.println(request.getParameter("contents"));
+        request.setAttribute("answer", savedAnswer);
 
-//        writeAnswerJson(response, savedAnswer);
-
-        return new ModelAndView(new JsonView()).addObject("answer", answer);
+        return new JsonView();
     }
 
-    private void writeAnswerJson(HttpServletResponse response, Answer answer) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter out = response.getWriter();
-        out.print(mapper.writeValueAsString(answer));
-    }
+
 }
